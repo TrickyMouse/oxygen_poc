@@ -1,20 +1,23 @@
-import {defineConfig, CookieSessionStorage} from '@shopify/hydrogen/config';
+import {
+  defineConfig,
+  CookieSessionStorage,
+  PerformanceMetricsServerAnalyticsConnector,
+} from '@shopify/hydrogen/config';
 
 export default defineConfig({
-  shopify: {
-    defaultCountryCode: 'CA',
+  shopify: () => ({
     defaultLanguageCode: 'EN',
-    storeDomain: Oxygen.env.PUBLIC_STORE_DOMAIN,
-    storefrontToken: Oxygen.env.PUBLIC_STOREFRONT_API_TOKEN,
-    privateStorefrontToken: Oxygen.env.PRIVATE_STOREFRONT_API_TOKEN,
+    defaultCountryCode: 'CA',
+    storeDomain: 'keith-tweed.myshopify.com',
+    storefrontToken: '0b5dc3f1269ae6b90d7dd53adb0c42db',
     storefrontApiVersion: '2022-07',
-    storefrontId: Oxygen.env.PUBLIC_STOREFRONT_ID,
-  },
+  }),
   session: CookieSessionStorage('__session', {
     path: '/',
     httpOnly: true,
-    secure: import.meta.env.PROD,
-    sameSite: 'Strict',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
     maxAge: 60 * 60 * 24 * 30,
   }),
+  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
 });
